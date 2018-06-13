@@ -74,6 +74,8 @@ private slots:
 
     void on_checkBox_J4_clicked();
 
+    void on_pushButton_Disable_clicked();
+
 private:
     Ui::MainWindow *ui;
 

@@ -234,7 +234,7 @@ void createsharedmemory(void)
 
         shmdt(p);
         pthread_mutex_unlock(&create_mutex);
-        usleep(6000);
+//        usleep(6000);
     }
 
 }
@@ -400,17 +400,18 @@ void controlcheck(void)
 void MainWindow::on_pushButton_Enable_clicked()
 {
     int i ;
-    for(i = 0 ;i < 0x42 ;i += 0x16)
+
+    for(i = 0 ;i <= 66 ;i += 22)
         iomap[i] = 6;
-    usleep(100000);
+    usleep(30000);
 
-    for(i = 0 ;i < 0x42 ;i += 0x16)
+    for(i = 0 ;i <= 66 ;i += 22)
         iomap[i] = 7;
-    usleep(100000);
+    usleep(30000);
 
-    for(i = 0 ;i < 0x42 ;i += 0x16)
+    for(i = 0 ;i <= 66 ;i += 22)
         iomap[i] = 15;
-    usleep(100000);
+//    usleep(30000);
 
 }
 
@@ -422,13 +423,13 @@ void MainWindow::on_pushButton_forward_clicked()
         foreward = false;
 
     if(ui->checkBox_J1->isChecked())
-        J1.FRD.forewared_position++;
+        J1.FRD.forewared_position+=100;
     if(ui->checkBox_J2->isChecked())
-        J2.FRD.forewared_position++;
+        J2.FRD.forewared_position+=100;
     if(ui->checkBox_J3->isChecked())
-        J3.FRD.forewared_position++;
+        J3.FRD.forewared_position+=100;
     if(ui->checkBox_J4->isChecked())
-        J4.FRD.forewared_position++;
+        J4.FRD.forewared_position+=100;
 
 
 }
@@ -441,13 +442,13 @@ void MainWindow::on_pushButton_back_clicked()
         back =false;
 
     if(ui->checkBox_J1->isChecked())
-        J1.INV.invsersion_position++;
+        J1.INV.invsersion_position+=100;
     if(ui->checkBox_J2->isChecked())
-        J2.INV.invsersion_position++;
+        J2.INV.invsersion_position+=100;
     if(ui->checkBox_J3->isChecked())
-        J3.INV.invsersion_position++;
+        J3.INV.invsersion_position+=100;
     if(ui->checkBox_J4->isChecked())
-        J4.INV.invsersion_position++;
+        J4.INV.invsersion_position+=100;
 
 }
 
@@ -459,13 +460,13 @@ void MainWindow::on_pushButton_highspeed_clicked()
         hp = true;
 
     if(ui->checkBox_J1->isChecked())
-        J1.hSP.high_speed++;
+        J1.hSP.high_speed+=100;
     if(ui->checkBox_J2->isChecked())
-        J2.hSP.high_speed++;
+        J2.hSP.high_speed+=100;
     if(ui->checkBox_J3->isChecked())
-        J3.hSP.high_speed++;
+        J3.hSP.high_speed+=100;
     if(ui->checkBox_J4->isChecked())
-        J4.hSP.high_speed++;
+        J4.hSP.high_speed+=100;
 
 }
 
@@ -477,13 +478,13 @@ void MainWindow::on_pushButton_lowspeed_clicked()
         lp = false;
 
     if(ui->checkBox_J1->isChecked())
-        J1.LSP.low_speed++;
+        J1.LSP.low_speed+=100;
     if(ui->checkBox_J2->isChecked())
-        J2.LSP.low_speed++;
+        J2.LSP.low_speed+=100;
     if(ui->checkBox_J3->isChecked())
-        J3.LSP.low_speed++;
+        J3.LSP.low_speed+=100;
     if(ui->checkBox_J4->isChecked())
-        J4.LSP.low_speed++;
+        J4.LSP.low_speed+=100;
 
 }
 
@@ -521,5 +522,15 @@ void MainWindow::on_checkBox_J4_clicked()
         J4.J4_check = true;
     else
         J4.J4_check = false;
+
+}
+
+void MainWindow::on_pushButton_Disable_clicked()
+{
+    int i ;
+
+    for(i = 0 ;i <= 66 ;i += 22)
+        iomap[i] = 7;
+//    usleep(30000);
 
 }
