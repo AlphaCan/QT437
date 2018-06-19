@@ -17,10 +17,19 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
     connect(timer,SIGNAL(timeout()),this,SLOT(showtime()));
     timer->start(500);
-    ui->pushButton_highspeed->setAutoRepeat(true);// continue
-    ui->pushButton_forward->setAutoRepeat(true);
-    ui->pushButton_back->setAutoRepeat(true);
-    ui->pushButton_lowspeed->setAutoRepeat(true);
+
+    ui->pushButton_J1B->setAutoRepeat(true);
+    ui->pushButton_J1F->setAutoRepeat(true);
+
+    ui->pushButton_J2B->setAutoRepeat(true);
+    ui->pushButton_J2F->setAutoRepeat(true);
+
+    ui->pushButton_J3B->setAutoRepeat(true);
+    ui->pushButton_J3F->setAutoRepeat(true);
+
+    ui->pushButton_J4B->setAutoRepeat(true);
+    ui->pushButton_J4F->setAutoRepeat(true);
+
 }
 
 MainWindow::~MainWindow()
@@ -214,7 +223,7 @@ void createsharedmemory(void)
     memcpy(first,q,256);
     shmdt(q);
     pthread_mutex_unlock(&create_mutex);
-    qDebug("%d %d\n",first[120],first[124]);
+    qDebug("%x %x %x %x\n",first[90],first[91],first[92],first[93]);
 
 
 
@@ -231,10 +240,9 @@ void createsharedmemory(void)
         }
 
         memcpy(p,iomap,256);
-
         shmdt(p);
         pthread_mutex_unlock(&create_mutex);
-//        usleep(6000);
+        usleep(2000);
     }
 
 }
@@ -270,109 +278,94 @@ void MainWindow::on_pushButton_serial_disconnect_clicked()
 
 void control_J1(void)
 {
-    uint8_t i;
-    if(foreward)
+    if(J1.FRD.forewared_position < 0)
     {
-        for(i = 0;i < 4;i++)
-            iomap[2 + i] = first[90 + i] + (J1.FRD.tab[i]&0xff);
+        iomap[2] = first[90] - (J1.FRD.tab[0]&0xff);
+        iomap[3] = first[91] - (J1.FRD.tab[1]&0xff);
+        iomap[4] = first[92] - (J1.FRD.tab[2]&0xff);
+        iomap[5] = first[93] - (J1.FRD.tab[3]&0xff);
     }
-    if(back)
+    else
     {
-        for(i = 0 ;i < 4 ;i++)
-            iomap[2 + i] = first[90 + i] - (J1.INV.tab[i]&0xff);
-    }
-    if(hp)
-    {
-        for(i = 0 ;i < 4 ;i++)
-            iomap[10 + i] = first[94 + i] + (J1.hSP.tab[i]&0xff);
-    }
-    if(lp)
-    {
-        for(i = 0 ;i < 4 ;i++)
-            iomap[10 + i] = first[94 + i] - (J1.LSP.tab[i]&0xff);
+        iomap[2] = first[90] + (J1.FRD.tab[0]&0xff);
+        iomap[3] = first[91] + (J1.FRD.tab[1]&0xff);
+        iomap[4] = first[92] + (J1.FRD.tab[2]&0xff);
+        iomap[5] = first[93] + (J1.FRD.tab[3]&0xff);
     }
 
-    qDebug("J1:%d %d %d %d\n",iomap[2],iomap[3],iomap[10],iomap[11]);
+
+
+//    qDebug("J1:%d %d %d %d\n",iomap[2],iomap[3],iomap[10],iomap[11]);
 }
 
 void control_J2(void)
 {
-    uint8_t i;
-    if(foreward)
+    if(J2.FRD.forewared_position < 0)
     {
-        for(i = 0;i < 4;i++)
-            iomap[24 + i] = first[100 + i] + (J2.FRD.tab[i]&0xff);
+        iomap[24] = first[100] - (J2.FRD.tab[0]&0xff);
+        iomap[25] = first[101] - (J2.FRD.tab[1]&0xff);
+        iomap[26] = first[102] - (J2.FRD.tab[2]&0xff);
+        iomap[27] = first[103] - (J2.FRD.tab[3]&0xff);
     }
-    if(back)
+    else
     {
-        for(i = 0 ;i < 4 ;i++)
-            iomap[24 + i] = first[100 + i] + (J2.INV.tab[i]&0xff);
+        iomap[24] = first[100] + (J2.FRD.tab[0]&0xff);
+        iomap[25] = first[101] + (J2.FRD.tab[1]&0xff);
+        iomap[26] = first[102] + (J2.FRD.tab[2]&0xff);
+        iomap[27] = first[103] + (J2.FRD.tab[3]&0xff);
     }
-    if(hp)
-    {
-        for(i = 0 ;i < 4 ;i++)
-            iomap[32 + i] = first[104 + i] + (J2.hSP.tab[i]&0xff);
-    }
-    if(lp)
-    {
-        for(i = 0 ;i < 4 ;i++)
-            iomap[32 + i] = first[104 + i] + (J2.LSP.tab[i]&0xff);
-    }
-    qDebug("J2:%d %d %d %d\n",iomap[24],iomap[25],iomap[32],iomap[33]);
+
+
+
+//    qDebug("J2:%d %d %d %d\n",iomap[24],iomap[25],iomap[32],iomap[33]);
 }
 
 void control_J3(void)
 {
-    uint8_t i;
-    if(foreward)
+    if(J3.FRD.forewared_position < 0)
     {
-        for(i = 0;i < 4;i++)
-            iomap[46 + i] = first[110 + i] + (J3.FRD.tab[i]&0xff);
+        iomap[46] = first[110] - (J3.FRD.tab[0]&0xff);
+        iomap[47] = first[111] - (J3.FRD.tab[1]&0xff);
+        iomap[48] = first[112] - (J3.FRD.tab[2]&0xff);
+        iomap[49] = first[113] - (J3.FRD.tab[3]&0xff);
+    }
+    else
+    {
+        iomap[46] = first[110] + (J3.FRD.tab[0]&0xff);
+        iomap[47] = first[111] + (J3.FRD.tab[1]&0xff);
+        iomap[48] = first[112] + (J3.FRD.tab[2]&0xff);
+        iomap[49] = first[113] + (J3.FRD.tab[3]&0xff);
+
     }
 
-    if(back)
-    {
-        for(i = 0 ;i < 4 ;i++)
-            iomap[46 + i] = first[110 + i] + (J3.INV.tab[i]&0xff);
-    }
-    if(hp)
-    {
-        for(i = 0 ;i < 4 ;i++)
-            iomap[54 + i] = first[114 + i] + (J3.hSP.tab[i]&0xff);
-    }
-    if(lp)
-    {
-        for(i = 0 ;i < 4 ;i++)
-            iomap[54 + i] = first[114 + i] + (J3.LSP.tab[i]&0xff);
-    }
-    qDebug("J3:%d %d %d %d\n",iomap[46],iomap[47],iomap[54],iomap[55]);
+
+
+//    qDebug("J3:%d %d %d %d\n",iomap[46],iomap[47],iomap[54],iomap[55]);
 
 }
 
 void control_J4(void)
 {
-    uint8_t i;
-    if(foreward)
+    if(J4.FRD.forewared_position < 0 )
     {
-        for(i = 0;i < 4;i++)
-            iomap[68 + i] = first[120 + i] + (J4.FRD.tab[i]&0xff);
+        iomap[68] = first[120] - (J4.FRD.tab[0]&0xff);
+        iomap[69] = first[121] - (J4.FRD.tab[1]&0xff);
+        iomap[70] = first[122] - (J4.FRD.tab[2]&0xff);
+        iomap[71] = first[123] - (J4.FRD.tab[3]&0xff);
+
     }
-    if(back)
+    else
     {
-        for(i = 0 ;i < 4 ;i++)
-            iomap[68 + i] = first[120 + i] + (J4.INV.tab[i]&0xff);
+        iomap[68] = first[120] + (J4.FRD.tab[0]&0xff);
+        iomap[69] = first[121] + (J4.FRD.tab[1]&0xff);
+        iomap[70] = first[122] + (J4.FRD.tab[2]&0xff);
+        iomap[71] = first[123] + (J4.FRD.tab[3]&0xff);
+
     }
-    if(hp)
-    {
-        for(i = 0 ;i < 4 ;i++)
-            iomap[76 + i] = first[124 + i] + (J4.hSP.tab[i]&0xff);
-    }
-    if(lp)
-    {
-        for(i = 0 ;i < 4 ;i++)
-            iomap[76 + i] = first[124 + i] + (J4.LSP.tab[i]&0xff);
-    }
-    qDebug("J4:%d %d %d %d\n",iomap[68],iomap[69],iomap[76],iomap[77]);
+
+
+
+//    qDebug("J4:%d %d %d %d\n",iomap[68],iomap[69],iomap[76],iomap[77]);
 }
 
 
@@ -380,19 +373,16 @@ void controlcheck(void)
 {
     while(1)
     {
-        if(J1.J1_check)
+//        if(J1.J1_check)
             control_J1();
-        if(J2.J2_check)
+//        if(J2.J2_check)
             control_J2();
-        if(J3.J3_check)
+//        if(J3.J3_check)
             control_J3();
-        if(J4.J4_check)
+//        if(J4.J4_check)
             control_J4();
-        usleep(10000);
-//        qDebug("123\n");
+        usleep(3000);
     }
-
-
 }
 
 
@@ -403,127 +393,19 @@ void MainWindow::on_pushButton_Enable_clicked()
 
     for(i = 0 ;i <= 66 ;i += 22)
         iomap[i] = 6;
-    usleep(30000);
+    usleep(10000);
 
     for(i = 0 ;i <= 66 ;i += 22)
         iomap[i] = 7;
-    usleep(30000);
+    usleep(10000);
 
     for(i = 0 ;i <= 66 ;i += 22)
         iomap[i] = 15;
-//    usleep(30000);
-
-}
-
-void MainWindow::on_pushButton_forward_clicked()
-{
-    if(ui->pushButton_forward->isDown())
-        foreward = true;
-    else
-        foreward = false;
-
-    if(ui->checkBox_J1->isChecked())
-        J1.FRD.forewared_position+=100;
-    if(ui->checkBox_J2->isChecked())
-        J2.FRD.forewared_position+=100;
-    if(ui->checkBox_J3->isChecked())
-        J3.FRD.forewared_position+=100;
-    if(ui->checkBox_J4->isChecked())
-        J4.FRD.forewared_position+=100;
 
 
 }
 
-void MainWindow::on_pushButton_back_clicked()
-{
-    if(ui->pushButton_back->isDown())
-        back =true;
-    else
-        back =false;
 
-    if(ui->checkBox_J1->isChecked())
-        J1.INV.invsersion_position+=100;
-    if(ui->checkBox_J2->isChecked())
-        J2.INV.invsersion_position+=100;
-    if(ui->checkBox_J3->isChecked())
-        J3.INV.invsersion_position+=100;
-    if(ui->checkBox_J4->isChecked())
-        J4.INV.invsersion_position+=100;
-
-}
-
-void MainWindow::on_pushButton_highspeed_clicked()
-{
-    if(ui->pushButton_highspeed->isDown())
-        hp =true;
-    else
-        hp = true;
-
-    if(ui->checkBox_J1->isChecked())
-        J1.hSP.high_speed+=100;
-    if(ui->checkBox_J2->isChecked())
-        J2.hSP.high_speed+=100;
-    if(ui->checkBox_J3->isChecked())
-        J3.hSP.high_speed+=100;
-    if(ui->checkBox_J4->isChecked())
-        J4.hSP.high_speed+=100;
-
-}
-
-void MainWindow::on_pushButton_lowspeed_clicked()
-{
-    if(ui->pushButton_lowspeed->isDown())
-        lp = true;
-    else
-        lp = false;
-
-    if(ui->checkBox_J1->isChecked())
-        J1.LSP.low_speed+=100;
-    if(ui->checkBox_J2->isChecked())
-        J2.LSP.low_speed+=100;
-    if(ui->checkBox_J3->isChecked())
-        J3.LSP.low_speed+=100;
-    if(ui->checkBox_J4->isChecked())
-        J4.LSP.low_speed+=100;
-
-}
-
-void MainWindow::on_checkBox_J1_clicked()
-{
-    if(ui->checkBox_J1->isChecked())
-        J1.J1_check = true;
-    else
-        J1.J1_check = false;
-//    QString s = QString::number(J1.FRD.forewared_position);
-
-}
-
-void MainWindow::on_checkBox_J2_clicked()
-{
-    if(ui->checkBox_J2->isChecked())
-        J2.J2_check = true;
-    else
-        J2.J2_check = false;
-
-}
-
-void MainWindow::on_checkBox_J3_clicked()
-{
-    if(ui->checkBox_J3->isChecked())
-        J3.J3_check = true;
-    else
-        J3.J3_check = false;
-
-}
-
-void MainWindow::on_checkBox_J4_clicked()
-{
-    if(ui->checkBox_J4->isChecked())
-        J4.J4_check = true;
-    else
-        J4.J4_check = false;
-
-}
 
 void MainWindow::on_pushButton_Disable_clicked()
 {
@@ -531,6 +413,46 @@ void MainWindow::on_pushButton_Disable_clicked()
 
     for(i = 0 ;i <= 66 ;i += 22)
         iomap[i] = 7;
-//    usleep(30000);
+
 
 }
+
+void MainWindow::on_pushButton_J1F_pressed()
+{
+    J1.FRD.forewared_position += 1500;
+}
+void MainWindow::on_pushButton_J1B_pressed()
+{
+    J1.FRD.forewared_position -= 1500;
+}
+
+void MainWindow::on_pushButton_J2F_pressed()
+{
+    J2.FRD.forewared_position += 1500;
+}
+
+void MainWindow::on_pushButton_J2B_pressed()
+{
+    J2.FRD.forewared_position -= 1500;
+}
+
+void MainWindow::on_pushButton_J3F_pressed()
+{
+    J3.FRD.forewared_position += 1500;
+}
+
+void MainWindow::on_pushButton_J3B_pressed()
+{
+    J3.FRD.forewared_position -= 1500;
+}
+
+void MainWindow::on_pushButton_J4F_pressed()
+{
+    J4.FRD.forewared_position += 1500;
+}
+
+void MainWindow::on_pushButton_J4B_pressed()
+{
+    J4.FRD.forewared_position -= 1500;
+}
+
