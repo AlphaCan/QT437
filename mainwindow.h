@@ -16,7 +16,7 @@
 #include <QThread>
 #include <QString>
 #include <qtconcurrentrun.h>
-
+#include <time.h>
 
 
 namespace Ui {
@@ -58,23 +58,24 @@ private slots:
 
     void on_pushButton_Enable_clicked();
 
-    void on_pushButton_forward_clicked();
-
-    void on_pushButton_back_clicked();
-
-    void on_pushButton_highspeed_clicked();
-
-    void on_pushButton_lowspeed_clicked();
-
-    void on_checkBox_J1_clicked();
-
-    void on_checkBox_J2_clicked();
-
-    void on_checkBox_J3_clicked();
-
-    void on_checkBox_J4_clicked();
-
     void on_pushButton_Disable_clicked();
+
+    void on_pushButton_J1F_pressed();
+
+    void on_pushButton_J1B_pressed();
+
+    void on_pushButton_J2F_pressed();
+
+    void on_pushButton_J2B_pressed();
+
+    void on_pushButton_J3F_pressed();
+
+    void on_pushButton_J3B_pressed();
+
+    void on_pushButton_J4F_pressed();
+
+    void on_pushButton_J4B_pressed();
+
 
 private:
     Ui::MainWindow *ui;
@@ -95,23 +96,6 @@ typedef struct CONTROL
         int forewared_position;
         char tab[4];
     }FRD;
-    union b_positon
-    {
-        int invsersion_position;
-        char tab[4];
-    }INV;
-    union high_speed
-    {
-        int high_speed;
-        char tab[4];
-    }hSP;
-    union l_speed
-    {
-        int low_speed;
-        char tab[4];
-    }LSP;
-
-    bool J1_check,J2_check,J3_check,J4_check;
 
 
 }ec_control;
